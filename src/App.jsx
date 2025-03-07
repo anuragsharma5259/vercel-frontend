@@ -32,7 +32,7 @@ export default function App() {
         formData.append("language", language);
 
         try {
-            const response = await fetch("http://localhost:5000/upload-resume", {
+            const response = await fetch("https://vercel-backend-fine.vercel.app/", {
                 method: "POST",
                 body: formData,
             });
