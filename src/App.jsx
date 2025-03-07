@@ -40,7 +40,7 @@ export default function App() {
 
     try {
       const response = await fetch(
-        "http://vercel-backend-production.up.railway.app/upload-resume",
+        "https://vercel-backend-production.up.railway.app/upload-resume",
         {
           method: "POST",
           body: formData,
