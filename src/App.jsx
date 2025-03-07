@@ -32,10 +32,11 @@ export default function App() {
         formData.append("language", language);
 
         try {
-            const response = await fetch("https://vercel-backend-fine.vercel.app/", {
+            const response = await fetch("https://vercel-backend-fine.vercel.app/upload-resume", {
                 method: "POST",
                 body: formData,
             });
+            
 
             const data = await response.json();
             setExtractedText(data.extractedText || "No text extracted!");
