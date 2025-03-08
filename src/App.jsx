@@ -63,7 +63,7 @@ export default function App() {
         <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white">
             {/* Title Section */}
             <h1 className="text-4xl md:text-5xl font-extrabold mb-6 flex items-center gap-2 text-blue-400 neon-glow">
-                <Flame size={40} mdSize={50} />
+                <Flame className="h-10 w-10 md:h-12 md:w-12" />
                 Roast My Resume 
             </h1>
 
