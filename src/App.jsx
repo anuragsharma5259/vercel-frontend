@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/Card";
 import { Loader2, Upload, Flame, Copy, ChevronUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -11,6 +11,32 @@ export default function App() {
     const [loading, setLoading] = useState(false);
     const [language, setLanguage] = useState("English");
     const [isUploadVisible, setIsUploadVisible] = useState(true);
+
+    useEffect(() => {
+        // Function to add touch effect
+        const handleTouchStart = (e) => {
+            e.target.classList.add('touch-effect');
+        };
+
+        const handleTouchEnd = (e) => {
+            e.target.classList.remove('touch-effect');
+        };
+
+        // Add event listeners to roast text elements
+        const roastElements = document.querySelectorAll('.roast-text p');
+        roastElements.forEach((element) => {
+            element.addEventListener('touchstart', handleTouchStart);
+            element.addEventListener('touchend', handleTouchEnd);
+        });
+
+        // Cleanup event listeners
+        return () => {
+            roastElements.forEach((element) => {
+                element.removeEventListener('touchstart', handleTouchStart);
+                element.removeEventListener('touchend', handleTouchEnd);
+            });
+        };
+    }, [roastText]);
 
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
@@ -133,7 +159,7 @@ export default function App() {
                         </button>
                     </CardHeader>
 
-                    <CardContent>
+                    <CardContent className="roast-text">
                         <ReactMarkdown 
                             components={{ 
                                 p: ({ node, ...props }) => (
