@@ -25,23 +25,25 @@ export default function App() {
             alert("Please upload a resume first!");
             return;
         }
-
+    
         setLoading(true);
         const formData = new FormData();
         formData.append("resume", selectedFile);
         formData.append("language", language);
-
+    
         try {
-            const response = await fetch("http://localhost:5000/upload-resume", {
+            const response = await fetch(`${process.env.BACKEND_URL}/upload-resume`, {
                 method: "POST",
                 body: formData,
             });
-
+    
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+    
             const data = await response.json();
-            setExtractedText(data.extractedText || "No text extracted!");
             setRoastText(data.roast || "No roast returned!");
-
-            // Minimize upload card after receiving response
+    
             setIsUploadVisible(false);
         } catch (error) {
             console.error("Error uploading file:", error);
@@ -50,6 +52,7 @@ export default function App() {
             setLoading(false);
         }
     };
+    
 
     const handleCopy = () => {
         if (!roastText) return;
