@@ -32,7 +32,7 @@ export default function App() {
         formData.append("language", language);
     
         try {
-            const response = await fetch(`${process.env.BACKEND_URL}/upload-resume`, {
+            const response = await fetch(`https://roastapi-production.up.railway.app/upload-resume`, {
                 method: "POST",
                 body: formData,
             });
