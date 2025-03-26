@@ -55,7 +55,7 @@ export default function App() {
         setLoading(true);
         const formData = new FormData();
         formData.append("resume", selectedFile);
-        formData.append("language", language);
+        formData.append("language", language);   
     
         try {
             const response = await fetch(`https://roastapi-production.up.railway.app/upload-resume`, {
