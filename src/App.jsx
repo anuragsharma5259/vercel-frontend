@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/Card";
-import { Loader2, Upload, Flame, Copy, ChevronUp } from "lucide-react";
+import { Loader2, Upload, Flame, Copy, ChevronDown, ChevronUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import "./index.css";
 
@@ -11,32 +11,6 @@ export default function App() {
     const [loading, setLoading] = useState(false);
     const [language, setLanguage] = useState("English");
     const [isUploadVisible, setIsUploadVisible] = useState(true);
-
-    useEffect(() => {
-        // Function to add touch effect
-        const handleTouchStart = (e) => {
-            e.target.classList.add('touch-effect');
-        };
-
-        const handleTouchEnd = (e) => {
-            e.target.classList.remove('touch-effect');
-        };
-
-        // Add event listeners to roast text elements
-        const roastElements = document.querySelectorAll('.roast-text p');
-        roastElements.forEach((element) => {
-            element.addEventListener('touchstart', handleTouchStart);
-            element.addEventListener('touchend', handleTouchEnd);
-        });
-
-        // Cleanup event listeners
-        return () => {
-            roastElements.forEach((element) => {
-                element.removeEventListener('touchstart', handleTouchStart);
-                element.removeEventListener('touchend', handleTouchEnd);
-            });
-        };
-    }, [roastText]);
 
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
@@ -51,25 +25,23 @@ export default function App() {
             alert("Please upload a resume first!");
             return;
         }
-    
+
         setLoading(true);
         const formData = new FormData();
         formData.append("resume", selectedFile);
-        formData.append("language", language);   
-    
+        formData.append("language", language);
+
         try {
             const response = await fetch(`https://roastapi-production.up.railway.app/upload-resume`, {
                 method: "POST",
                 body: formData,
             });
-    
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.status}`);
-            }
-    
+
             const data = await response.json();
+            setExtractedText(data.extractedText || "No text extracted!");
             setRoastText(data.roast || "No roast returned!");
-    
+
+            // Minimize upload card after receiving response
             setIsUploadVisible(false);
         } catch (error) {
             console.error("Error uploading file:", error);
@@ -88,8 +60,8 @@ export default function App() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white">
             {/* Title Section */}
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 flex items-center gap-2 text-blue-400 neon-glow">
-                <Flame className="h-10 w-10 md:h-12 md:w-12" />
+            <h1 className="text-5xl font-extrabold mb-6 flex items-center gap-2 text-blue-400 neon-glow">
+                <Flame size={50} />
                 Roast My Resume 
             </h1>
 
@@ -105,9 +77,9 @@ export default function App() {
 
             {/* Upload Card (Minimizable) */}
             {isUploadVisible && (
-                <Card className="w-full max-w-lg p-6 bg-gray-900 shadow-xl border border-gray-800 rounded-2xl neon-card">
+                <Card className="w-full max-w-lg p-6 bg-gray-900 shadow-xl border border-black-800 rounded-2xl neon-card">
                     <CardHeader className="flex justify-between items-center">
-                        <CardTitle className="text-lg md:text-xl font-semibold text-white">Upload Your Resume</CardTitle>
+                        <CardTitle className="text-xl font-semibold text-black-400">Upload Your Resume</CardTitle>
                         <button onClick={() => setIsUploadVisible(false)} className="text-gray-400 hover:text-white">
                             <ChevronUp size={24} />
                         </button>
@@ -148,7 +120,7 @@ export default function App() {
             {roastText && (
                 <Card className="relative w-full max-w-2xl mt-8 p-6 bg-gray-900/70 shadow-[0_0_30px_rgba(0,150,255,0.8)] border border-blue-600 neon-card transition-transform transform hover:scale-105 rounded-2xl">
                     <CardHeader className="flex justify-between items-center">
-                        <CardTitle className="text-lg md:text-2xl font-extrabold text-blue-400 flex items-center gap-2 transition-all duration-300 hover:text-blue-500">
+                        <CardTitle className="text-2xl font-extrabold text-blue-400 flex items-center gap-2 transition-all duration-300 hover:text-blue-500">
                             🔥 Your Roast 🔥
                         </CardTitle>
                         <button 
@@ -159,13 +131,13 @@ export default function App() {
                         </button>
                     </CardHeader>
 
-                    <CardContent className="roast-text">
+                    <CardContent>
                         <ReactMarkdown 
                             components={{ 
                                 p: ({ node, ...props }) => (
                                     <p 
                                         {...props} 
-                                        className="text-gray-100 leading-relaxed text-base md:text-lg font-medium tracking-wide transition-all duration-300 hover:text-red-100 hover:shadow-lg hover:shadow-blue-500 hover:scale-105"
+                                        className="text-gray-100 leading-relaxed text-lg font-medium tracking-wide transition-all duration-300 hover:text-red-100 hover:shadow-lg hover:shadow-blue-500 hover:scale-105 "
                                     />
                                 )
                             }}
