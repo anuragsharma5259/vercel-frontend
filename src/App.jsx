@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/Card";
-import { Loader2, Upload, Flame, Copy, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, Upload, Flame, Copy, ChevronUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import "./index.css";
 
@@ -25,52 +25,47 @@ export default function App() {
             alert("Please upload a resume first!");
             return;
         }
-    
+
         setLoading(true);
         const formData = new FormData();
         formData.append("resume", selectedFile);
         formData.append("language", language);
-    
+
         try {
             const response = await fetch(`https://roastapi.onrender.com/upload-resume`, {
                 method: "POST",
                 body: formData,
             });
-    
+
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
             }
-    
+
             const data = await response.json();
             setExtractedText(data.extractedText || "No text extracted!");
             setRoastText(data.roast || "No roast returned!");
-    
-            // Minimize upload card after receiving response
             setIsUploadVisible(false);
         } catch (error) {
             console.error("Error uploading file:", error);
-            setRoastText("❌ Failed to get a roast. Server might be down or something went wrong.");
+            setRoastText("\u274C Failed to get a roast. Server might be down or something went wrong.");
         } finally {
             setLoading(false);
         }
     };
-    
 
     const handleCopy = () => {
         if (!roastText) return;
         navigator.clipboard.writeText(roastText);
-        alert("🔥 Roast copied to clipboard!");
+        alert("\ud83d\udd25 Roast copied to clipboard!");
     };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white">
-            {/* Title Section */}
             <h1 className="text-5xl font-extrabold mb-6 flex items-center gap-2 text-blue-400 neon-glow">
                 <Flame size={50} />
                 Roast My Resume 
             </h1>
 
-            {/* Toggle Upload Card Button */}
             {!isUploadVisible && (
                 <button 
                     onClick={() => setIsUploadVisible(true)} 
@@ -80,7 +75,6 @@ export default function App() {
                 </button>
             )}
 
-            {/* Upload Card (Minimizable) */}
             {isUploadVisible && (
                 <Card className="w-full max-w-lg p-6 bg-gray-900 shadow-xl border border-black-800 rounded-2xl neon-card">
                     <CardHeader className="flex justify-between items-center">
@@ -97,7 +91,6 @@ export default function App() {
                             className="mb-3 w-full p-2 bg-gray-800 text-white rounded cursor-pointer border border-gray-600 hover:border-blue-400 transition"
                         />
 
-                        {/* Language Selection */}
                         <select 
                             value={language} 
                             onChange={handleLanguageChange} 
@@ -121,12 +114,11 @@ export default function App() {
                 </Card>
             )}
 
-            {/* Roast Output Card */}
             {roastText && (
                 <Card className="relative w-full max-w-2xl mt-8 p-6 bg-gray-900/70 shadow-[0_0_30px_rgba(0,150,255,0.8)] border border-blue-600 neon-card transition-transform transform hover:scale-105 rounded-2xl">
                     <CardHeader className="flex justify-between items-center">
                         <CardTitle className="text-2xl font-extrabold text-blue-400 flex items-center gap-2 transition-all duration-300 hover:text-blue-500">
-                            🔥 Your Roast 🔥
+                            \ud83d\udd25 Your Roast \ud83d\udd25
                         </CardTitle>
                         <button 
                             onClick={handleCopy} 
@@ -135,7 +127,6 @@ export default function App() {
                             <Copy size={28} />
                         </button>
                     </CardHeader>
-
                     <CardContent>
                         <ReactMarkdown 
                             components={{ 
@@ -147,7 +138,7 @@ export default function App() {
                                 )
                             }}
                         >
-                          {roastText}
+                            {roastText}
                         </ReactMarkdown>
                     </CardContent>
                 </Card>
