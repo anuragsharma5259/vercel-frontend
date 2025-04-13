@@ -36,19 +36,18 @@ export default function App() {
 
     try {
       const response = await axios.post(
-        "https://roastapi-production-93c7.up.railway.app/upload-resume",
+        "https://roastapi-production-93c7.up.railway.app/upload-resume", // Your backend API URL
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer YOUR_API_KEY`,  // Replace with your actual API key if required
           },
         }
       );
 
-      // Check the response structure to avoid any undefined values
       setExtractedText(response.data.extractedText || "No text extracted!");
       setRoastText(response.data.roast || "No roast returned!");
-
       setIsUploadVisible(false);
     } catch (error) {
       console.error("Error uploading file:", error);
