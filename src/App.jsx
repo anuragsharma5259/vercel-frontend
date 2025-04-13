@@ -41,12 +41,11 @@ export default function App() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-          },  
+          },
         }
       );
 
-    //   console.log(response.data);
-
+      // Check the response structure to avoid any undefined values
       setExtractedText(response.data.extractedText || "No text extracted!");
       setRoastText(response.data.roast || "No roast returned!");
 
