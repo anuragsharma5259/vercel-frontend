@@ -41,7 +41,7 @@ export default function App() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-          },
+          },  
         }
       );
 
