@@ -36,7 +36,7 @@ export default function App() {
 
     try {
       const response = await axios.post(
-        "https://roastapi.onrender.com/upload-resume",
+        "https://roastapi-production.up.railway.app/upload-resume",
         formData,
         {
           headers: {
