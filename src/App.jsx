@@ -36,15 +36,16 @@ export default function App() {
 
     try {
       const response = await axios.post(
-        "https://roastapi.onrender.com/upload-resume", // Your backend API URL
+        "https://roastapi.onrender.com/upload-resume",
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer YOUR_API_KEY`,  // Replace with your actual API key if required
+            "Content-Type": "multipart/form-data"
+            // ✅ No need to send Authorization from frontend
           },
         }
       );
+      
 
       setExtractedText(response.data.extractedText || "No text extracted!");
       setRoastText(response.data.roast || "No roast returned!");
