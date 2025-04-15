@@ -27,6 +27,13 @@ export default function App() {
       return;
     }
 
+    // Check file size (optional, depending on your backend limits)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (selectedFile.size > maxSize) {
+      alert("File size is too large! Please upload a smaller file.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData();
     formData.append("resume", selectedFile);
@@ -41,11 +48,9 @@ export default function App() {
         {
           headers: {
             "Content-Type": "multipart/form-data"
-            // ✅ No need to send Authorization from frontend
           },
         }
       );
-      
 
       setExtractedText(response.data.extractedText || "No text extracted!");
       setRoastText(response.data.roast || "No roast returned!");
@@ -53,7 +58,7 @@ export default function App() {
     } catch (error) {
       console.error("Error uploading file:", error);
       setRoastText(
-        "❌ Failed to get a roast. Server might be down or something went wrong."
+        error.response?.data?.message || "❌ Failed to get a roast. Server might be down or something went wrong."
       );
     } finally {
       setLoading(false);
